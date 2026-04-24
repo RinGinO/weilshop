@@ -121,7 +121,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ## 📊 Текущий статус проекта
 
-**Статус:** Документация завершена, код не реализован
+**Статус:** Архитектура реализована, код в стадии разработки
 
 ✅ Завершённые задачи:
 - Полная спецификация API (50+ эндпоинтов)
@@ -132,13 +132,19 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 - Политики безопасности (152-ФЗ, JWT, rate limiting)
 - Инструкции по развёртыванию
 - Глоссарий терминов
+- ✅ Модульная архитектура Backend (10 модулей)
+- ✅ Конфигурация TypeScript + ESLint + Prettier
+- ✅ Архитектура Frontend (Next.js 14, App Router)
+- ✅ Архитектура Admin (Next.js 14, App Router)
+- ✅ Tailwind CSS с цветовой схемой проекта
 
 ⏳ Ожидают реализации:
-- Backend (NestJS)
-- Frontend (Next.js)
-- Административная панель
-- Миграции базы данных
-- Тесты
+- Реализация сервисов и контроллеров (TODO заглушки)
+- Prisma миграции
+- Страницы и компоненты frontend/admin
+- Тесты (unit, integration, e2e)
+
+📊 **Прогресс:** ~15% (архитектура готова)
 
 ---
 
@@ -164,7 +170,10 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 /
 ├── .env.example             # Шаблон переменных окружения
+├── .vscode/                 # Настройки VS Code
 ├── KODA.md                  # Этот файл (контекст проекта)
+├── README.md                # Описание проекта
+├── PROJECT_STATUS.md        # Текущий статус и прогресс
 ├── docs/                    # Документация проекта
 │   ├── README.md           # Техническое задание
 │   ├── architecture.md     # Архитектура системы
@@ -187,10 +196,62 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 │   ├── security.md         # Политики безопасности
 │   ├── validation-rules.md # Правила валидации API
 │   └── glossary.md         # Глоссарий терминов
-└── KODA.md                 # Этот файл
+├── backend/                 # NestJS API
+│   ├── src/
+│   │   ├── main.ts         # Точка входа
+│   │   ├── app.module.ts   # Главный модуль
+│   │   ├── auth/           # Аутентификация
+│   │   ├── catalog/        # Товары, категории, бренды
+│   │   ├── tasks/          # Задачи ухода, комплекты
+│   │   ├── knowledge/      # Статьи, инструкции, FAQ
+│   │   ├── favorites/      # Избранное
+│   │   ├── cart/           # Корзина
+│   │   ├── requests/       # Заявки
+│   │   ├── consultations/  # Консультации
+│   │   ├── account/        # Личный кабинет
+│   │   ├── admin/          # Админ панель
+│   │   └── common/         # Общие модули
+│   ├── prisma/
+│   │   └── schema.prisma   # Схема БД
+│   ├── test/               # E2E тесты
+│   ├── scripts/            # Скрипты
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── nest-cli.json
+│   ├── .eslintrc.js
+│   ├── .prettierrc
+│   └── .env.example
+├── frontend/                # Next.js витрина
+│   ├── src/
+│   │   ├── app/            # App Router страницы
+│   │   ├── entities/       # Бизнес-сущности
+│   │   ├── features/       # Функции
+│   │   ├── widgets/        # Крупные блоки
+│   │   └── shared/         # Общие компоненты
+│   ├── public/             # Статика
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── next.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── .eslintrc.json
+│   └── .env.example
+└── admin/                   # Next.js админка
+    ├── src/
+    │   ├── app/            # App Router страницы
+    │   ├── entities/       # Сущности админки
+    │   ├── features/       # Функции
+    │   ├── widgets/        # Блоки
+    │   └── shared/         # Общие компоненты
+    ├── public/
+    ├── package.json
+    ├── tsconfig.json
+    ├── next.config.js
+    ├── tailwind.config.js
+    ├── postcss.config.js
+    ├── .eslintrc.json
+    └── .env.example
 ```
-
-> **Примечание:** На текущий момент проект находится на стадии документации. Код не реализован.
 
 ---
 
@@ -347,13 +408,17 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 - [x] Пользовательские сценарии
 
 ### Этап 2: Backend и админка
-- [ ] Настройка NestJS проекта
-- [ ] Реализация модулей API
+- [x] Настройка NestJS проекта
+- [x] Модульная структура (10 модулей)
+- [x] Конфигурация TypeScript + ESLint + Prettier
+- [ ] Реализация сервисов и контроллеров
 - [ ] Настройка Prisma и миграций
 - [ ] Разработка административной панели
 
 ### Этап 3: Публичная витрина
-- [ ] Настройка Next.js проекта
+- [x] Настройка Next.js проекта
+- [x] App Router структура
+- [x] Tailwind CSS конфигурация
 - [ ] Главная страница
 - [ ] Каталог и карточка товара
 - [ ] Страницы задач ухода
@@ -478,4 +543,4 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ---
 
 *Последнее обновление: 2025-01-15*
-*Статус проекта: Документация завершена, код не реализован*
+*Статус проекта: ~15% (архитектура реализована, код в стадии разработки)*
