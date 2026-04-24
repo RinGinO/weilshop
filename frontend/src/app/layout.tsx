@@ -1,3 +1,5 @@
+import './globals.css';
+
 // TODO: Root layout
 // - Providers (QueryClient, Zustand)
 // - Header

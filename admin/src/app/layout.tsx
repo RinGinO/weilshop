@@ -1,3 +1,5 @@
+import './globals.css';
+
 // TODO: Root layout админки
 // - Auth check
 // - Sidebar navigation
