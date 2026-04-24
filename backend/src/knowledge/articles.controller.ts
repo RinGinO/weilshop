@@ -1,22 +1,56 @@
-// TODO: ArticlesService
-export class ArticlesService {}
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  HttpCode,
+  HttpStatus,
+  ParseUUIDPipe,
+} from '@nestjs/common';
+import { ArticlesService } from './articles.service';
+import { CreateArticleDto, UpdateArticleDto, ArticleQueryDto } from './dto/article.dto';
+import { Public } from '../common/decorators/public.decorator';
 
-// TODO: ArticlesController
-// GET /api/knowledge/articles
-// GET /api/knowledge/articles/:slug
-export class ArticlesController {}
+@Controller('knowledge/articles')
+export class ArticlesController {
+  constructor(private articlesService: ArticlesService) {}
 
-// TODO: InstructionsService
-export class InstructionsService {}
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() dto: CreateArticleDto) {
+    return this.articlesService.create(dto);
+  }
 
-// TODO: InstructionsController
-// GET /api/knowledge/instructions
-// GET /api/knowledge/instructions/:slug
-export class InstructionsController {}
+  @Get()
+  @Public()
+  async findAll(@Query() query: ArticleQueryDto) {
+    return this.articlesService.findAll(query);
+  }
 
-// TODO: FaqService
-export class FaqService {}
+  @Get(':id')
+  @Public()
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.articlesService.findOne(id);
+  }
 
-// TODO: FaqController
-// GET /api/knowledge/faq
-export class FaqController {}
+  @Get('slug/:slug')
+  @Public()
+  async findBySlug(@Param('slug') slug: string) {
+    return this.articlesService.findBySlug(slug);
+  }
+
+  @Put(':id')
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateArticleDto) {
+    return this.articlesService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.articlesService.remove(id);
+  }
+}
