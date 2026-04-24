@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
@@ -12,8 +12,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // TODO: реализация валидации payload
-  // async validate(payload: any) {
-  //   return { userId: payload.sub, email: payload.email };
-  // }
+  async validate(payload: { sub: string }) {
+    if (!payload.sub) {
+      throw new UnauthorizedException('Неверный токен');
+    }
+
+    return {
+      userId: payload.sub,
+    };
+  }
 }

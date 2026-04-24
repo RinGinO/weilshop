@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD, Reflector } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { CatalogModule } from './catalog/catalog.module';
@@ -13,6 +14,7 @@ import { AccountModule } from './account/account.module';
 import { AdminModule } from './admin/admin.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
+import { AuthGuard } from './common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -38,6 +40,13 @@ import { RedisModule } from './common/redis/redis.module';
     AdminModule,
     PrismaModule,
     RedisModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    Reflector,
   ],
 })
 export class AppModule {}
