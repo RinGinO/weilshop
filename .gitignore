@@ -61,3 +61,10 @@ temp/
 # Тесты e2e
 playwright-report/
 test-results/
+
+# Lock files (опционально, можно коммитить)
+# package-lock.json
+# yarn.lock
+
+# TypeScript build info
+*.tsbuildinfo
