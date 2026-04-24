@@ -22,8 +22,8 @@ import { RedisModule } from './common/redis/redis.module';
     }),
     ThrottlerModule.forRoot([
       {
-        ttl: parseInt(process.env.RATE_LIMIT_TTL) || 60,
-        limit: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+        ttl: parseInt(process.env.RATE_LIMIT_TTL || '60'),
+        limit: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
       },
     ]),
     AuthModule,
