@@ -1,6 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
 import { Pacifico } from 'next/font/google';
+import { Providers } from './providers';
 
 const logoFont = Pacifico({
   weight: '400',
@@ -109,13 +110,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
-      </body>
+  <body className="min-h-screen flex flex-col">
+    <Providers>
+      <Header />
+      <div className="flex-1">
+        {children}
+      </div>
+      <Footer />
+    </Providers>
+  </body>
     </html>
   );
 }

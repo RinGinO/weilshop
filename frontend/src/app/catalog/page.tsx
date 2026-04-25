@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { productsApi } from '@/entities/product/api';
+import type { ProductsFilter } from '@/entities/product/types';
 
 const CATEGORIES = [
   { slug: 'all', name: 'Все товары' },
@@ -23,41 +26,26 @@ const BRANDS = [
   { slug: 'detail', name: 'Detail' },
 ];
 
-const PRODUCTS = [
-  { slug: 'avtoshampun-premium', name: 'Автошампунь Premium', brand: 'Leraton', category: 'avtoshampuni', price: 890, volume: '500 мл', description: 'Концентрированный шампунь с воском' },
-  { slug: 'avtoshampun-grass', name: 'Автошампунь Grass', brand: 'Grass', category: 'avtoshampuni', price: 650, volume: '1 л', description: 'Бюджетный шампунь для ежедневной мойки' },
-  { slug: 'mr-pink', name: 'Chemical Guys Mr. Pink', brand: 'Chemical Guys', category: 'avtoshampuni', price: 1590, volume: '473 мл', description: 'Легендарный шампунь с ароматом вишни' },
-  { slug: 'nano-magic', name: 'Koch Chemie Nano Magic', brand: 'Koch Chemie', category: 'avtoshampuni', price: 2100, volume: '1 л', description: 'Нано-шампунь премиум класса' },
-  { slug: 'vosk-karnaubskiy', name: 'Воск карнаубский', brand: 'Leraton', category: 'voski-i-poliroli', price: 1290, volume: '200 г', description: 'Твёрдый воск для глубокого блеска' },
-  { slug: 'meguiars-wax', name: 'Meguiars Ultimate Wax', brand: 'Meguiars', category: 'voski-i-poliroli', price: 1890, volume: '450 мл', description: 'Синтетический воск с длительной защитой' },
-  { slug: 'sonax-wax', name: 'Sonax Polymer Wax', brand: 'Sonax', category: 'voski-i-poliroli', price: 1450, volume: '500 мл', description: 'Полимерный воск для быстрого нанесения' },
-  { slug: 'ochistitel-bituma', name: 'Очиститель битума', brand: 'Leraton', category: 'ochistiteli', price: 690, volume: '500 мл', description: 'Быстрое удаление смолы и битума' },
-  { slug: 'ochistitel-pyli', name: 'Очиститель тормозной пыли', brand: 'Shafite', category: 'ochistiteli', price: 750, volume: '500 мл', description: 'Для дисков и колёсных арок' },
-  { slug: 'ochistitel-styokol', name: 'Очиститель стёкол', brand: 'Grass', category: 'ochistiteli', price: 450, volume: '1 л', description: 'Без разводов и аммиака' },
-  { slug: 'ochistitel-plastika', name: 'Очиститель пластика', brand: 'Detail', category: 'uhod-za-salonom', price: 590, volume: '500 мл', description: 'Матовый финиш для салона' },
-  { slug: 'kondicioner-kozhi', name: 'Кондиционер кожи', brand: 'Leraton', category: 'uhod-za-salonom', price: 890, volume: '250 мл', description: 'Питание и защита кожаного салона' },
-  { slug: 'chernitel-shin', name: 'Чернитель шин', brand: 'Leraton', category: 'dlya-kolyos', price: 690, volume: '500 мл', description: 'Глубокий чёрный цвет резины' },
-  { slug: 'gubka-dlya-moyki', name: 'Губка для мойки', brand: 'Detail', category: 'aksessuary', price: 350, volume: null, description: 'Двухсторонняя губка' },
-  { slug: 'varezhka-mikrofibr', name: 'Варежка микрофибра', brand: 'Detail', category: 'aksessuary', price: 590, volume: null, description: 'Для бесконтактной мойки' },
-  { slug: 'polotence-60x90', name: 'Полотенце 60x90', brand: 'Detail', category: 'aksessuary', price: 890, volume: null, description: 'Впитывающее полотенце для сушки' },
-];
-
 export default function CatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 12;
 
-  const filteredProducts = PRODUCTS.filter((product) => {
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    const matchesBrand = selectedBrand === 'all' || product.brand.toLowerCase().replace(' ', '-') === selectedBrand;
-    const matchesSearch = searchQuery === '' || product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesBrand && matchesSearch;
-  }).sort((a, b) => {
-    if (sortBy === 'name') return a.name.localeCompare(b.name);
-    if (sortBy === 'price-asc') return a.price - b.price;
-    if (sortBy === 'price-desc') return b.price - a.price;
-    return 0;
+  const filters: ProductsFilter = {
+    category: selectedCategory !== 'all' ? selectedCategory : undefined,
+    brand: selectedBrand !== 'all' ? selectedBrand : undefined,
+    search: searchQuery || undefined,
+    sortBy: sortBy as any,
+    page,
+    limit,
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['products', filters],
+    queryFn: () => productsApi.getList(filters),
   });
 
   return (
@@ -152,16 +140,40 @@ export default function CatalogPage() {
           {/* Products Grid */}
           <div className="flex-1">
             <div className="mb-4 text-[#5B6470]">
-              Найдено товаров: <span className="font-semibold text-[#000000]">{filteredProducts.length}</span>
+              {isLoading ? (
+                <span>Загрузка...</span>
+              ) : error ? (
+                <span className="text-red-600">Ошибка загрузки</span>
+              ) : (
+                <>
+                  Найдено товаров:{' '}
+                  <span className="font-semibold text-[#000000]">{data?.total || 0}</span>
+                </>
+              )}
             </div>
 
-            {filteredProducts.length === 0 ? (
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-xl p-6 animate-pulse">
+                    <div className="aspect-square bg-[#F5F4EF] rounded-lg mb-4" />
+                    <div className="h-4 bg-[#F5F4EF] rounded mb-2" />
+                    <div className="h-6 bg-[#F5F4EF] rounded mb-3" />
+                    <div className="h-4 bg-[#F5F4EF] rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-[#5B6470] text-lg">Ошибка загрузки товаров</p>
+              </div>
+            ) : !data || data.items.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-[#5B6470] text-lg">Товары не найдены</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
+                {data.items.map((product) => (
                   <Link
                     key={product.slug}
                     href={`/catalog/${product.slug}`}
@@ -170,8 +182,8 @@ export default function CatalogPage() {
                     <div className="aspect-square bg-[#F5F4EF] rounded-lg mb-4 flex items-center justify-center">
                       <span className="text-6xl">🧴</span>
                     </div>
-                    <div className="text-sm text-[#5B6470] mb-1">{product.brand}</div>
-                    <h3 className="text-lg font-semibold text-[#000000] mb-2 group-hover:text-[#333333] transition-colors">
+                    <div className="text-sm text-[#5B6470] mb-1">{product.brand.name}</div>
+                    <h3 className="text-lg font-semibold text-[#000000] mb-2 group-hover:text-[#333333] transition-colors line-clamp-2">
                       {product.name}
                     </h3>
                     <p className="text-sm text-[#5B6470] mb-3 line-clamp-2">{product.description}</p>
@@ -181,6 +193,29 @@ export default function CatalogPage() {
                     <div className="text-xl font-bold text-[#000000]">{product.price} ₽</div>
                   </Link>
                 ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {data && data.total > limit && (
+              <div className="mt-8 flex justify-center gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-4 py-2 rounded-lg border border-[#D9DCDD] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F4EF]"
+                >
+                  ← Назад
+                </button>
+                <span className="px-4 py-2">
+                  Страница {page} из {Math.ceil(data.total / limit)}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.min(Math.ceil(data.total / limit), p + 1))}
+                  disabled={page >= Math.ceil(data.total / limit)}
+                  className="px-4 py-2 rounded-lg border border-[#D9DCDD] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F4EF]"
+                >
+                  Вперёд →
+                </button>
               </div>
             )}
           </div>
