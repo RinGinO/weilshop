@@ -12,11 +12,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { AdminProductsService } from './admin-products.service';
-import {
-  CreateProductDto,
-  UpdateProductDto,
-  ProductQueryDto,
-} from './dto/product.dto';
+import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/product.dto';
 
 @Controller('admin/products')
 export class AdminProductsController {
@@ -39,10 +35,7 @@ export class AdminProductsController {
   }
 
   @Put(':id')
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: UpdateProductDto,
-  ) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto) {
     return this.productsService.updateProduct(id, dto);
   }
 

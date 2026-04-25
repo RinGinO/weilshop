@@ -18,7 +18,9 @@ export class AdminCategoriesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: { name: string; slug: string; description?: string; parentId?: string }) {
+  async create(
+    @Body() dto: { name: string; slug: string; description?: string; parentId?: string },
+  ) {
     return this.categoriesService.createCategory(dto);
   }
 
@@ -35,7 +37,14 @@ export class AdminCategoriesController {
   @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: { name?: string; slug?: string; description?: string; parentId?: string; isActive?: boolean },
+    @Body()
+    dto: {
+      name?: string;
+      slug?: string;
+      description?: string;
+      parentId?: string;
+      isActive?: boolean;
+    },
   ) {
     return this.categoriesService.updateCategory(id, dto);
   }

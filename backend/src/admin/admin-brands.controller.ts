@@ -18,7 +18,9 @@ export class AdminBrandsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: { name: string; slug: string; description?: string; logoMediaId?: string }) {
+  async create(
+    @Body() dto: { name: string; slug: string; description?: string; logoMediaId?: string },
+  ) {
     return this.brandsService.createBrand(dto);
   }
 
@@ -35,7 +37,14 @@ export class AdminBrandsController {
   @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: { name?: string; slug?: string; description?: string; logoMediaId?: string; isActive?: boolean },
+    @Body()
+    dto: {
+      name?: string;
+      slug?: string;
+      description?: string;
+      logoMediaId?: string;
+      isActive?: boolean;
+    },
   ) {
     return this.brandsService.updateBrand(id, dto);
   }

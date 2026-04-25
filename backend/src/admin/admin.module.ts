@@ -17,6 +17,12 @@ import { AdminCategoriesService } from './admin-categories.service';
 import { AdminCategoriesController } from './admin-categories.controller';
 import { AdminBrandsService } from './admin-brands.service';
 import { AdminBrandsController } from './admin-brands.controller';
+import { AdminArticlesService } from './admin-articles.service';
+import { AdminArticlesController } from './admin-articles.controller';
+import { AdminInstructionsService } from './admin-instructions.service';
+import { AdminInstructionsController } from './admin-instructions.controller';
+import { AdminFaqService } from './admin-faq.service';
+import { AdminFaqsController } from './admin-faqs.controller';
 
 @Module({
   controllers: [
@@ -30,6 +36,9 @@ import { AdminBrandsController } from './admin-brands.controller';
     AdminProductsController,
     AdminCategoriesController,
     AdminBrandsController,
+    AdminArticlesController,
+    AdminInstructionsController,
+    AdminFaqsController,
   ],
   providers: [
     AdminAuthService,
@@ -41,6 +50,9 @@ import { AdminBrandsController } from './admin-brands.controller';
     AdminProductsService,
     AdminCategoriesService,
     AdminBrandsService,
+    AdminArticlesService,
+    AdminInstructionsService,
+    AdminFaqService,
   ],
   exports: [
     AdminAuthService,
@@ -52,6 +64,9 @@ import { AdminBrandsController } from './admin-brands.controller';
     AdminProductsService,
     AdminCategoriesService,
     AdminBrandsService,
+    AdminArticlesService,
+    AdminInstructionsService,
+    AdminFaqService,
   ],
 })
 export class AdminModule {}

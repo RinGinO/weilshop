@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
 
 @Injectable()
@@ -31,9 +27,7 @@ export class AdminCategoriesService {
         name: dto.name,
         slug: dto.slug,
         description: dto.description,
-        parent: dto.parentId
-          ? { connect: { id: dto.parentId } }
-          : undefined,
+        parent: dto.parentId ? { connect: { id: dto.parentId } } : undefined,
       },
       include: {
         parent: true,
