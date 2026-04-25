@@ -74,7 +74,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#F5F4EF]">
       {/* Hero Section */}
-      <section className="bg-[#1F6B4F] text-white py-20">
+      <section className="bg-[#000000] text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-5xl font-bold mb-6">
@@ -117,10 +117,10 @@ export default function HomePage() {
               <Link
                 key={task.slug}
                 href={`/tasks/${task.slug}`}
-                className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all border border-[#D9DCDD] hover:border-[#1F6B4F]"
+                className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all border border-[#D9DCDD] hover:border-[#000000]"
               >
                 <div className="text-4xl mb-4">{task.icon}</div>
-                <h3 className="text-xl font-semibold text-[#1F2328] mb-2 group-hover:text-[#1F6B4F] transition-colors">
+                <h3 className="text-xl font-semibold text-[#1F2328] mb-2 group-hover:text-[#000000] transition-colors">
                   {task.name}
                 </h3>
                 <p className="text-[#5B6470]">{task.description}</p>
@@ -131,7 +131,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link
               href="/tasks"
-              className="text-[#1F6B4F] hover:text-[#1a5a42] font-semibold inline-flex items-center gap-2"
+              className="text-[#000000] hover:text-[#333333] font-semibold inline-flex items-center gap-2"
             >
               Показать все задачи
               <span>→</span>
@@ -161,11 +161,11 @@ export default function HomePage() {
                   <span className="text-6xl">🧴</span>
                 </div>
                 <div className="text-sm text-[#5B6470] mb-1">{product.brand}</div>
-                <h3 className="text-lg font-semibold text-[#1F2328] mb-2 group-hover:text-[#1F6B4F] transition-colors">
+                <h3 className="text-lg font-semibold text-[#1F2328] mb-2 group-hover:text-[#000000] transition-colors">
                   {product.name}
                 </h3>
                 <div className="text-sm text-[#5B6470] mb-3">{product.volume}</div>
-                <div className="text-xl font-bold text-[#1F6B4F]">
+                <div className="text-xl font-bold text-[#000000]">
                   {product.price} ₽
                 </div>
               </Link>
@@ -175,7 +175,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link
               href="/catalog"
-              className="text-[#1F6B4F] hover:text-[#1a5a42] font-semibold inline-flex items-center gap-2"
+              className="text-[#000000] hover:text-[#333333] font-semibold inline-flex items-center gap-2"
             >
               Смотреть весь каталог
               <span>→</span>

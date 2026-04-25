@@ -1,5 +1,12 @@
 import './globals.css';
 import Link from 'next/link';
+import { Pacifico } from 'next/font/google';
+
+const logoFont = Pacifico({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'WeilShop — Автохимия с подбором по задачам ухода',
@@ -12,32 +19,32 @@ function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-[#1F6B4F]">
+          <Link href="/" className={`text-3xl font-bold text-[#000000] ${logoFont.className}`}>
             WeilShop
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="/catalog" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/catalog" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               Каталог
             </Link>
-            <Link href="/tasks" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/tasks" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               Задачи ухода
             </Link>
-            <Link href="/knowledge" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/knowledge" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               База знаний
             </Link>
-            <Link href="/consultations" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/consultations" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               Консультации
             </Link>
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <Link href="/cart" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/cart" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               🛒 Корзина
             </Link>
-            <Link href="/account" className="text-[#1F2328] hover:text-[#1F6B4F] transition-colors">
+            <Link href="/account" className="text-[#1F2328] hover:text-[#000000] transition-colors">
               👤 Войти
             </Link>
           </div>
@@ -53,7 +60,7 @@ function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="text-2xl font-bold text-[#1F6B4F] mb-4">WeilShop</div>
+            <div className={`text-3xl font-bold mb-4 ${logoFont.className}`}>WeilShop</div>
             <p className="text-white/70">
               Профессиональная автохимия с подбором по задачам ухода
             </p>
