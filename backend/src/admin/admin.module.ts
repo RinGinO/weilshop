@@ -23,6 +23,10 @@ import { AdminInstructionsService } from './admin-instructions.service';
 import { AdminInstructionsController } from './admin-instructions.controller';
 import { AdminFaqService } from './admin-faq.service';
 import { AdminFaqsController } from './admin-faqs.controller';
+import { AdminRequestsCrudService } from './admin-requests-crud.service';
+import { AdminRequestsCrudController } from './admin-requests-crud.controller';
+import { AdminConsultationsCrudService } from './admin-consultations-crud.service';
+import { AdminConsultationsCrudController } from './admin-consultations-crud.controller';
 
 @Module({
   controllers: [
@@ -39,6 +43,8 @@ import { AdminFaqsController } from './admin-faqs.controller';
     AdminArticlesController,
     AdminInstructionsController,
     AdminFaqsController,
+    AdminRequestsCrudController,
+    AdminConsultationsCrudController,
   ],
   providers: [
     AdminAuthService,
@@ -53,6 +59,8 @@ import { AdminFaqsController } from './admin-faqs.controller';
     AdminArticlesService,
     AdminInstructionsService,
     AdminFaqService,
+    AdminRequestsCrudService,
+    AdminConsultationsCrudService,
   ],
   exports: [
     AdminAuthService,
@@ -67,6 +75,8 @@ import { AdminFaqsController } from './admin-faqs.controller';
     AdminArticlesService,
     AdminInstructionsService,
     AdminFaqService,
+    AdminRequestsCrudService,
+    AdminConsultationsCrudService,
   ],
 })
 export class AdminModule {}
