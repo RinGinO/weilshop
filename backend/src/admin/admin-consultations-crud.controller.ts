@@ -39,27 +39,18 @@ export class AdminConsultationsCrudController {
 
   @Post(':id/assign')
   @HttpCode(HttpStatus.OK)
-  async assign(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: AssignConsultationDto,
-  ) {
+  async assign(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignConsultationDto) {
     return this.consultationsService.assignConsultation(id, dto);
   }
 
   @Put(':id')
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: UpdateConsultationDto,
-  ) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateConsultationDto) {
     return this.consultationsService.updateConsultation(id, dto);
   }
 
   @Post(':id/resolve')
   @HttpCode(HttpStatus.OK)
-  async resolve(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: { response: string },
-  ) {
+  async resolve(@Param('id', ParseUUIDPipe) id: string, @Body() dto: { response: string }) {
     return this.consultationsService.resolveConsultation(id, dto.response);
   }
 

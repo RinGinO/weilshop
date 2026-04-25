@@ -12,11 +12,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { AdminRequestsCrudService } from './admin-requests-crud.service';
-import {
-  UpdateRequestDto,
-  UpdateRequestStatusDto,
-  RequestQueryDto,
-} from './dto/request.dto';
+import { UpdateRequestDto, UpdateRequestStatusDto, RequestQueryDto } from './dto/request.dto';
 
 @Controller('admin/requests')
 export class AdminRequestsCrudController {

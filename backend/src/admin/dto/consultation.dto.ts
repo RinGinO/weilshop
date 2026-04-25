@@ -1,12 +1,4 @@
-import {
-  IsString,
-  IsEnum,
-  IsUUID,
-  IsOptional,
-  IsInt,
-  Min,
-  Max,
-} from 'class-validator';
+import { IsString, IsEnum, IsUUID, IsOptional, IsInt, Min, Max } from 'class-validator';
 import { ConsultationStatus } from '@prisma/client';
 
 export class UpdateConsultationDto {

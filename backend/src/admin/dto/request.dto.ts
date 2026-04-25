@@ -1,13 +1,4 @@
-import {
-  IsString,
-  IsEnum,
-  IsUUID,
-  IsOptional,
-  IsInt,
-  Min,
-  Max,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsEnum, IsUUID, IsOptional, IsInt, Min, Max, IsBoolean } from 'class-validator';
 import { RequestStatus } from '@prisma/client';
 
 export class UpdateRequestDto {

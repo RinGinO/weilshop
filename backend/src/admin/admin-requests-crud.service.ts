@@ -1,14 +1,6 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
-import {
-  UpdateRequestDto,
-  UpdateRequestStatusDto,
-  RequestQueryDto,
-} from './dto/request.dto';
+import { UpdateRequestDto, UpdateRequestStatusDto, RequestQueryDto } from './dto/request.dto';
 
 @Injectable()
 export class AdminRequestsCrudService {
@@ -134,11 +126,7 @@ export class AdminRequestsCrudService {
     return request;
   }
 
-  async updateRequestStatus(
-    id: string,
-    dto: UpdateRequestStatusDto,
-    adminId: string,
-  ) {
+  async updateRequestStatus(id: string, dto: UpdateRequestStatusDto, adminId: string) {
     const request = await this.prisma.requestOrder.findUnique({
       where: { id },
     });
@@ -230,7 +218,15 @@ export class AdminRequestsCrudService {
   }
 
   async getRequestStatistics() {
-    const [totalCount, newCount, inReviewCount, confirmedCount, processingCount, completedCount, cancelledCount] = await Promise.all([
+    const [
+      totalCount,
+      newCount,
+      inReviewCount,
+      confirmedCount,
+      processingCount,
+      completedCount,
+      cancelledCount,
+    ] = await Promise.all([
       this.prisma.requestOrder.count(),
       this.prisma.requestOrder.count({ where: { status: 'NEW' } }),
       this.prisma.requestOrder.count({ where: { status: 'IN_REVIEW' } }),
