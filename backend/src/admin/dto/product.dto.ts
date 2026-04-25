@@ -64,12 +64,6 @@ export class CreateProductDto {
   @IsOptional()
   volume?: string;
 
-  @IsNumber()
-  @Min(0)
-  @Max(1000000)
-  @IsOptional()
-  price?: number;
-
   @IsInt()
   @Min(0)
   @Max(10000)
@@ -84,10 +78,6 @@ export class CreateProductDto {
   @IsOptional()
   @IsArray()
   taskIds?: string[];
-
-  @IsUUID()
-  @IsOptional()
-  coverMediaId?: string;
 }
 
 export class UpdateProductDto {
@@ -142,12 +132,6 @@ export class UpdateProductDto {
   @IsOptional()
   volume?: string;
 
-  @IsNumber()
-  @Min(0)
-  @Max(1000000)
-  @IsOptional()
-  price?: number;
-
   @IsInt()
   @Min(0)
   @Max(10000)
@@ -157,10 +141,6 @@ export class UpdateProductDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
-
-  @IsUUID()
-  @IsOptional()
-  coverMediaId?: string;
 }
 
 export class ProductQueryDto {
