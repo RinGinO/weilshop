@@ -20,6 +20,15 @@ import {
 } from './dto/consultation.dto';
 import { Public } from '../common/decorators/public.decorator';
 
+interface RequestWithUser {
+  user?: {
+    userId?: string;
+    adminId?: string;
+    roles?: string[];
+    email?: string;
+  };
+}
+
 @Controller('consultations')
 export class ConsultationsController {
   constructor(private consultationsService: ConsultationsService) {}
@@ -27,7 +36,7 @@ export class ConsultationsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Public()
-  async create(@Request() req: any, @Body() dto: CreateConsultationDto) {
+  async create(@Request() req: RequestWithUser, @Body() dto: CreateConsultationDto) {
     const userId = req.user?.userId || null;
     return this.consultationsService.createRequest(userId, dto);
   }
@@ -38,7 +47,7 @@ export class ConsultationsController {
   }
 
   @Get('my')
-  async getMyConsultations(@Request() req: any, @Query() query: ConsultationQueryDto) {
+  async getMyConsultations(@Request() req: RequestWithUser, @Query() query: ConsultationQueryDto) {
     const userId = req.user?.userId;
     if (!userId) {
       throw new Error('Требуется авторизация');
@@ -47,7 +56,10 @@ export class ConsultationsController {
   }
 
   @Get('assigned')
-  async getAssignedConsultations(@Request() req: any, @Query() query: ConsultationQueryDto) {
+  async getAssignedConsultations(
+    @Request() req: RequestWithUser,
+    @Query() query: ConsultationQueryDto,
+  ) {
     const adminId = req.user?.adminId || req.user?.userId;
     if (!adminId) {
       throw new Error('Требуется авторизация администратора');
@@ -56,7 +68,7 @@ export class ConsultationsController {
   }
 
   @Get(':id')
-  async findOne(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Request() req: RequestWithUser, @Param('id', ParseUUIDPipe) id: string) {
     const userId = req.user?.userId;
     const isAdmin = !!req.user?.adminId || !!req.user?.roles;
     return this.consultationsService.findOne(id, userId, isAdmin);
@@ -71,7 +83,7 @@ export class ConsultationsController {
   @Patch(':id/respond')
   @HttpCode(HttpStatus.OK)
   async respond(
-    @Request() req: any,
+    @Request() req: RequestWithUser,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: RespondConsultationDto,
   ) {
@@ -84,7 +96,7 @@ export class ConsultationsController {
 
   @Post(':id/close')
   @HttpCode(HttpStatus.OK)
-  async close(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async close(@Request() req: RequestWithUser, @Param('id', ParseUUIDPipe) id: string) {
     const adminId = req.user?.adminId || req.user?.userId;
     if (!adminId) {
       throw new Error('Требуется авторизация администратора');
@@ -94,7 +106,7 @@ export class ConsultationsController {
 
   @Post(':id/cancel')
   @HttpCode(HttpStatus.OK)
-  async cancel(@Request() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async cancel(@Request() req: RequestWithUser, @Param('id', ParseUUIDPipe) id: string) {
     const userId = req.user?.userId;
     if (!userId) {
       throw new Error('Требуется авторизация');

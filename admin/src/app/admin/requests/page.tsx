@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { adminRequestsApi } from '@/entities/request/api';
 import type { RequestOrder, RequestStatus } from '@/entities/request/types';
@@ -31,7 +31,7 @@ export default function AdminRequestsPage() {
   const [total, setTotal] = useState(0);
   const limit = 20;
 
-  const loadRequests = async () => {
+  const loadRequests = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await adminRequestsApi.getList({
@@ -46,11 +46,11 @@ export default function AdminRequestsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, limit, statusFilter]);
 
   useEffect(() => {
     loadRequests();
-  }, [page, statusFilter]);
+  }, [loadRequests]);
 
   return (
     <div className="space-y-6">

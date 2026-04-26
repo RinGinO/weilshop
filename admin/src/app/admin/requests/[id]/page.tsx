@@ -45,6 +45,7 @@ export default function AdminRequestDetailPage() {
 
   useEffect(() => {
     loadRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadRequest = async () => {

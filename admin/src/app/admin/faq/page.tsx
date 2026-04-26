@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { adminFaqApi } from '@/entities/faq/api';
 import type { FaqItem } from '@/entities/faq/types';
@@ -22,7 +22,7 @@ export default function AdminFaqPage() {
   const [total, setTotal] = useState(0);
   const limit = 50;
 
-  const loadFaq = async () => {
+  const loadFaq = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await adminFaqApi.getList({
@@ -38,11 +38,11 @@ export default function AdminFaqPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, limit, search, categoryFilter]);
 
   useEffect(() => {
     loadFaq();
-  }, [page, search, categoryFilter]);
+  }, [loadFaq]);
 
   const handleDelete = async (id: string, question: string) => {
     if (!confirm(`Удалить вопрос "${question}"?`)) return;

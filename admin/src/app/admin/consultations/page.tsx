@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { adminConsultationsApi } from '@/entities/consultation/api';
 import type { ConsultationRequest, ConsultationStatus } from '@/entities/consultation/types';
@@ -27,7 +27,7 @@ export default function AdminConsultationsPage() {
   const [total, setTotal] = useState(0);
   const limit = 20;
 
-  const loadConsultations = async () => {
+  const loadConsultations = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await adminConsultationsApi.getList({
@@ -42,11 +42,11 @@ export default function AdminConsultationsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, limit, statusFilter]);
 
   useEffect(() => {
     loadConsultations();
-  }, [page, statusFilter]);
+  }, [loadConsultations]);
 
   return (
     <div className="space-y-6">

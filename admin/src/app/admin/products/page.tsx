@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { adminProductsApi } from '@/entities/product/api';
 import type { Product } from '@/entities/product/types';
@@ -13,7 +13,7 @@ export default function AdminProductsPage() {
   const [total, setTotal] = useState(0);
   const limit = 20;
 
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await adminProductsApi.getList({ page, limit, search });
@@ -24,11 +24,11 @@ export default function AdminProductsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, limit, search]);
 
   useEffect(() => {
     loadProducts();
-  }, [page, search]);
+  }, [loadProducts]);
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Удалить товар "${name}"?`)) return;

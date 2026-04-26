@@ -27,6 +27,7 @@ export default function AdminTaskEditPage() {
 
   useEffect(() => {
     loadTask();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadTask = async () => {

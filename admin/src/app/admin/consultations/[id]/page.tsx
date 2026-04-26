@@ -37,6 +37,7 @@ export default function AdminConsultationDetailPage() {
 
   useEffect(() => {
     loadConsultation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadConsultation = async () => {

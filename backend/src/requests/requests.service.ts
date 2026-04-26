@@ -36,7 +36,7 @@ export class RequestsService {
         customerPhone: dto.customerPhone,
         customerEmail: dto.customerEmail,
         items: {
-          create: cartItems.map((item: any) => ({
+          create: cartItems.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
             productNameSnapshot: item.product.name,
@@ -66,8 +66,13 @@ export class RequestsService {
 
     const skip = (page - 1) * limit;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = { userId };
+    const where: {
+      userId: string;
+      status?: RequestStatus;
+      OR?: Array<
+        { id: { contains: string } } | { comment: { contains: string; mode: 'insensitive' } }
+      >;
+    } = { userId };
 
     if (status) where.status = status;
 
@@ -183,7 +188,7 @@ export class RequestsService {
       throw new NotFoundException('Товар не найден');
     }
 
-    const existingItem = requestOrder.items.find((item: any) => item.productId === dto.productId);
+    const existingItem = requestOrder.items.find((item) => item.productId === dto.productId);
 
     if (existingItem) {
       return this.prisma.requestOrderItem.update({
@@ -279,7 +284,7 @@ export class RequestsService {
     });
 
     const stats: Record<string, number> = {};
-    counts.forEach((item: any) => {
+    counts.forEach((item) => {
       stats[item.status] = item._count.id;
     });
 
