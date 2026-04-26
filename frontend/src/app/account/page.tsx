@@ -1,16 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-const USER = {
-  name: 'Иван Иванов',
-  email: 'ivan@example.ru',
-  phone: '+7 (999) 000-00-00',
-  registeredAt: '15 января 2025',
-  ordersCount: 3,
-  totalSpent: 15670,
-};
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/entities/auth/store';
+import { useCartStore } from '@/entities/cart/store';
 
 const ORDERS = [
   {
@@ -47,7 +41,36 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function AccountPage() {
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading, logout, checkAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'settings'>('profile');
+  const totalItems = useCartStore((state) => state.totalItems);
+
+  useEffect(() => {
+    checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-[#F5F4EF] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#000000] mx-auto mb-4" />
+          <p className="text-[#5B6470]">Загрузка...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
 
   return (
     <main className="min-h-screen bg-[#F5F4EF]">
@@ -61,10 +84,10 @@ export default function AccountPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-[#D9DCDD] mb-6">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-[#000000] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-4">
-                  {USER.name.charAt(0)}
+                  {user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
                 </div>
-                <h2 className="text-xl font-bold text-[#000000]">{USER.name}</h2>
-                <p className="text-sm text-[#5B6470]">{USER.email}</p>
+                <h2 className="text-xl font-bold text-[#000000]">{user.name || 'Пользователь'}</h2>
+                <p className="text-sm text-[#5B6470]">{user.email}</p>
               </div>
 
               <div className="space-y-2">
@@ -86,7 +109,7 @@ export default function AccountPage() {
                       : 'text-[#1F2328] hover:bg-[#F5F4EF]'
                   }`}
                 >
-                  📦 Заказы ({USER.ordersCount})
+                  📦 Заказы
                 </button>
                 <button
                   onClick={() => setActiveTab('settings')}
@@ -100,12 +123,15 @@ export default function AccountPage() {
                 </button>
               </div>
 
-              <Link
-                href="/"
-                className="block w-full text-center mt-6 px-4 py-3 text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors"
+              <button
+                onClick={async () => {
+                  await logout();
+                  router.push('/');
+                }}
+                className="w-full text-center mt-6 px-4 py-3 text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors"
               >
                 Выйти
-              </Link>
+              </button>
             </div>
 
             {/* Quick Stats */}
@@ -114,15 +140,17 @@ export default function AccountPage() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-[#5B6470]">Заказов</span>
-                  <span className="font-semibold text-[#000000]">{USER.ordersCount}</span>
+                  <span className="font-semibold text-[#000000]">{ORDERS.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5B6470]">Потрачено</span>
-                  <span className="font-semibold text-[#000000]">{USER.totalSpent.toLocaleString()} ₽</span>
+                  <span className="text-[#5B6470]">В корзине</span>
+                  <span className="font-semibold text-[#000000]">{totalItems()} шт.</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5B6470]">Дата регистрации</span>
-                  <span className="font-semibold text-[#000000]">{USER.registeredAt}</span>
+                  <span className="text-[#5B6470]">Email</span>
+                  <span className={`font-semibold ${user.isEmailVerified ? 'text-green-600' : 'text-yellow-600'}`}>
+                    {user.isEmailVerified ? '✓ Подтверждён' : '⚠ Не подтверждён'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -143,7 +171,7 @@ export default function AccountPage() {
                       </label>
                       <input
                         type="text"
-                        defaultValue={USER.name}
+                        defaultValue={user.name || ''}
                         className="w-full px-4 py-3 rounded-lg border border-[#D9DCDD] bg-[#F5F4EF] focus:outline-none focus:ring-2 focus:ring-[#000000]"
                       />
                     </div>
@@ -154,8 +182,9 @@ export default function AccountPage() {
                       </label>
                       <input
                         type="email"
-                        defaultValue={USER.email}
-                        className="w-full px-4 py-3 rounded-lg border border-[#D9DCDD] bg-[#F5F4EF] focus:outline-none focus:ring-2 focus:ring-[#000000]"
+                        defaultValue={user.email}
+                        disabled
+                        className="w-full px-4 py-3 rounded-lg border border-[#D9DCDD] bg-[#E5E5E5] text-[#5B6470] focus:outline-none"
                       />
                     </div>
 
@@ -165,7 +194,7 @@ export default function AccountPage() {
                       </label>
                       <input
                         type="tel"
-                        defaultValue={USER.phone}
+                        defaultValue={user.phone || ''}
                         className="w-full px-4 py-3 rounded-lg border border-[#D9DCDD] bg-[#F5F4EF] focus:outline-none focus:ring-2 focus:ring-[#000000]"
                       />
                     </div>
