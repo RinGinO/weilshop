@@ -1,9 +1,12 @@
 import './globals.css';
+import { Inter } from 'next/font/google';
 
-// TODO: Root layout админки
-// - Auth check
-// - Sidebar navigation
-// - Header с профилем администратора
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'WeilShop Admin — Панель администратора',
+  description: 'Панель управления интернет-магазином автохимии WeilShop',
+};
 
 export default function RootLayout({
   children,
@@ -12,9 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body>
-        {children}
-      </body>
+      <body className={`${inter.className} bg-[#F5F4EF]`}>{children}</body>
     </html>
   );
 }
