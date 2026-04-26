@@ -43,7 +43,7 @@ export const adminProductsApi = {
   /**
    * Обновить товар
    */
-  async update(id: string, data: UpdateProductDto): Promise<Product> {
+  async update(id: string, data: Omit<UpdateProductDto, 'id'>): Promise<Product> {
     const response = await apiClient.patch<Product>(`/api/admin/products/${id}`, data);
     return response.data;
   },
