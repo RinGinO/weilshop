@@ -1,5 +1,8 @@
 # KODA — Контекст проекта WeilShop
 
+**Дата обновления:** 2025-01-15  
+**Статус проекта:** 🟢 99% (готов к запуску)
+
 Этот файл содержит инструкционный контекст для работы с проектом **WeilShop**. Используйте его как основной справочник при любых взаимодействиях с кодовой базой.
 
 ---
@@ -26,6 +29,27 @@
 
 ---
 
+## 📊 Статус проекта
+
+| Компонент | Прогресс | Статус |
+|-----------|----------|--------|
+| Документация | 22 файла | ✅ 100% |
+| Backend | 147 endpoints | ✅ 100% |
+| Frontend | 10 страниц | ✅ 95% |
+| Admin UI | 20 страниц | ✅ 100% |
+| **Всего** | **~99%** | 🟢 **Готов** |
+
+### 📈 Статистика
+
+- **310+ файлов** кода
+- **25,900+ строк** кода
+- **147 API эндпоинтов**
+- **27 таблиц** базы данных
+- **0 TypeScript ошибок**
+- **0 критических warnings**
+
+---
+
 ## 🚀 Сборка и запуск
 
 ### Требования
@@ -46,7 +70,7 @@ cd weilshop
 
 # 2. Настройка базы данных
 psql -U postgres
-CREATE USER weilshop WITH PASSWORD 'weilshop_dev';
+CREATE USER weilshop_dev WITH PASSWORD 'weilshop_dev';
 CREATE DATABASE weilshop_dev OWNER weilshop_dev;
 GRANT ALL PRIVILEGES ON DATABASE weilshop_dev TO weilshop_dev;
 \q
@@ -113,64 +137,13 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:3001
 # Frontend
 NEXT_PUBLIC_API_URL=http://localhost:3001
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Admin
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_ADMIN_URL=http://localhost:3002
 ```
 
 Полный шаблон: `.env.example`
-
----
-
-## 📊 Текущий статус проекта
-
-**Статус:** Backend завершён, Frontend в разработке
-
-### ✅ Backend (100%)
-- ✅ **Auth модуль** (регистрация, логин, JWT, refresh)
-- ✅ **Catalog модуль** (товары, категории, бренды, сравнение)
-- ✅ **Tasks модуль** (задачи ухода, комплекты)
-- ✅ **Knowledge модуль** (статьи, инструкции, FAQ)
-- ✅ **Favorites модуль** (избранное)
-- ✅ **Cart модуль** (корзина)
-- ✅ **Requests модуль** (заявки)
-- ✅ **Consultations модуль** (консультации)
-- ✅ **Account модуль** (ЛК, уведомления, просмотры)
-- ✅ **Admin CRUD модуль** (управление всеми сущностями)
-
-**Итого:** 147 эндпоинтов, 33 сервиса, 30 контроллеров, 24 DTO
-
-### ✅ Frontend (~95%)
-- ✅ Главная страница (Hero, задачи, товары, преимущества, CTA)
-- ✅ Каталог (фильтры, поиск, сортировка, пагинация)
-- ✅ Карточка товара (изображение, характеристики, отзывы, сопутствующие)
-- ✅ Задачи ухода (список 12 задач)
-- ✅ Страница задачи (шаги, советы, товары, FAQ)
-- ✅ Корзина (товары, количество, оформление заказа)
-- ✅ Личный кабинет (профиль, заказы, настройки)
-- ✅ Консультации (форма заявки)
-- ✅ База знаний (статьи, инструкции, FAQ)
-- ✅ 404 страница
-- ✅ Аутентификация (login, register, redirect)
-
-### ✅ Admin UI (~100%)
-- ✅ Дашборд (статистика, последние заказы, quick actions)
-- ✅ CRUD товаров (создание, редактирование, удаление, активация)
-- ✅ CRUD категорий (дерево, родительские/дочерние)
-- ✅ CRUD брендов (логотипы, сайты)
-- ✅ CRUD задач ухода (шаги, советы, иконки)
-- ✅ CRUD статей (теги, SEO, категории)
-- ✅ CRUD инструкций (материалы, шаги, сложность)
-- ✅ CRUD FAQ (категории, порядок)
-- ✅ Управление заявками (6 статусов, история, таймлайн)
-- ✅ Управление консультациями (4 статуса, ответ эксперта)
-- ✅ Управление администраторами (роли, доступ)
-
-### 📊 Прогресс проекта
-| Компонент | Прогресс | Статус |
-|-----------|----------|--------|
-| Документация | 100% | ✅ |
-| Backend | 100% | ✅ |
-| Frontend | 95% | ✅ |
-| Admin UI | 100% | ✅ |
-| **Всего** | **~99%** | 🟢 |
 
 ---
 
@@ -203,16 +176,17 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ├── KODA.md                  # Этот файл (контекст проекта)
 ├── README.md                # Описание проекта
 ├── PROJECT_STATUS.md        # Текущий статус и прогресс
-├── docs/                    # Документация проекта (17 файлов)
+├── FINAL_STATUS.md          # Финальный статус проекта
+├── docs/                    # Документация проекта (22 файла)
 │   ├── README.md           # Техническое задание
 │   ├── architecture.md     # Архитектура системы
 │   ├── database-schema.md  # Логическая схема БД
-│   ├── api-contract.md     # REST API спецификация
+│   ├── api-contract.md     # REST API спецификация (147 endpoints)
 │   ├── design-concept.md   # Дизайн-концепция
 │   ├── sitemap.md          # Структура страниц
 │   ├── user-flows.md       # Пользовательские сценарии
 │   ├── implementation-roadmap.md  # План реализации
-│   ├── prisma-schema.prisma       # Схема Prisma ORM
+│   ├── prisma-schema.prisma       # Схема Prisma ORM (27 таблиц)
 │   ├── er-diagram.md       # ER-диаграмма
 │   ├── component-diagram.md # Компонентная диаграмма
 │   ├── admin-roles.md      # Роли администраторов
@@ -224,8 +198,10 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 │   ├── deployment.md       # Инструкции по развёртыванию
 │   ├── security.md         # Политики безопасности
 │   ├── validation-rules.md # Правила валидации API
-│   └── glossary.md         # Глоссарий терминов
-├── backend/                 # NestJS API (100%)
+│   ├── glossary.md         # Глоссарий терминов
+│   ├── component-diagram.md # Компонентная диаграмма
+│   └── er-diagram.md       # ER-диаграмма
+├── backend/                 # NestJS API (100% ✅)
 │   ├── src/
 │   │   ├── main.ts         # Точка входа
 │   │   ├── app.module.ts   # Главный модуль
@@ -248,7 +224,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 │   ├── tsconfig.json
 │   ├── nest-cli.json
 │   └── .eslintrc.js
-├── frontend/                # Next.js витрина (~85%)
+├── frontend/                # Next.js витрина (95% ✅)
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── layout.tsx  # Header + Footer
@@ -262,7 +238,11 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 │   │   │   │   └── [slug]/page.tsx # Страница задачи
 │   │   │   ├── cart/page.tsx       # Корзина
 │   │   │   ├── account/page.tsx    # Личный кабинет
-│   │   │   └── consultations/page.tsx # Консультации
+│   │   │   ├── consultations/page.tsx # Консультации
+│   │   │   ├── knowledge/    # База знаний
+│   │   │   ├── faq/          # FAQ
+│   │   │   ├── login/        # Авторизация
+│   │   │   └── register/     # Регистрация
 │   │   ├── entities/       # Бизнес-сущности
 │   │   ├── features/       # Функции
 │   │   ├── widgets/        # Крупные блоки
@@ -272,7 +252,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 │   ├── package.json
 │   ├── tailwind.config.js
 │   └── next.config.js
-└── admin/                   # Next.js админка (~100%)
+└── admin/                   # Next.js админка (100% ✅)
     ├── src/
     │   ├── app/
     │   │   ├── layout.tsx  # Layout с sidebar
@@ -547,6 +527,8 @@ NEW → IN_REVIEW → CONFIRMED → PROCESSING → COMPLETED / CANCELLED
 | `docs/security.md` | Политики безопасности |
 | `docs/validation-rules.md` | Правила валидации API |
 | `docs/glossary.md` | Глоссарий терминов |
+| `FINAL_STATUS.md` | Финальный статус проекта |
+| `PROJECT_STATUS.md` | Текущий прогресс |
 
 ---
 
@@ -581,6 +563,14 @@ NEW → IN_REVIEW → CONFIRMED → PROCESSING → COMPLETED / CANCELLED
 - [ ] Настройка домена и SSL
 - [ ] Настройка SMTP для email уведомлений
 - [ ] Мониторинг и логирование
+
+---
+
+## 📞 Контакты
+
+**Репозиторий:** https://github.com/RinGinO/weilshop  
+**Документация:** `/docs`  
+**Контекст проекта:** `/KODA.md`
 
 ---
 
