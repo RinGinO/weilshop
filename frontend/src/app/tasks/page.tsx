@@ -4,13 +4,32 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { tasksApi } from '@/entities/task/api';
 
+// Mock-данные для демонстрации без Backend
+const MOCK_TASKS = {
+  items: [
+    { slug: 'wash', name: 'Мойка кузова', shortDescription: 'Бережная очистка от загрязнений', icon: '🧼', productsCount: 12 },
+    { slug: 'interior', name: 'Чистка салона', shortDescription: 'Удаление пятен и запахов', icon: '🧽', productsCount: 8 },
+    { slug: 'plastic', name: 'Уход за пластиком', shortDescription: 'Защита и восстановление', icon: '🛡️', productsCount: 6 },
+    { slug: 'glass', name: 'Мойка стёкол', shortDescription: 'Кристальная прозрачность', icon: '🪟', productsCount: 4 },
+    { slug: 'wheels', name: 'Очистка дисков', shortDescription: 'Удаление тормозной пыли', icon: '🎯', productsCount: 5 },
+    { slug: 'wax', name: 'Восковая защита', shortDescription: 'Блеск и защита кузова', icon: '✨', productsCount: 7 },
+  ],
+  total: 6,
+  page: 1,
+  limit: 12,
+};
+
 export default function TasksPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['tasks'],
     queryFn: () => tasksApi.getList(),
+    retry: false,
   });
 
-  const tasks = data?.items || [];
+  // Используем mock-данные если API недоступен
+  const tasks = data?.items || MOCK_TASKS.items;
+  const hasError = error && tasks.length === 0;
+
   return (
     <main className="min-h-screen bg-[#F5F4EF]">
       <div className="container mx-auto px-4 py-8">
@@ -20,6 +39,9 @@ export default function TasksPage() {
           <p className="text-xl text-[#5B6470] max-w-3xl">
             Выберите задачу — мы подберём подходящие средства и пошаговую инструкцию
           </p>
+          {error && tasks.length > 0 && (
+            <p className="text-sm text-[#E57A22] mt-2">⚠️ Демонстрационный режим (Backend не подключён)</p>
+          )}
         </div>
 
         {/* Loading State */}
@@ -34,7 +56,7 @@ export default function TasksPage() {
               </div>
             ))}
           </div>
-        ) : error ? (
+        ) : hasError ? (
           <div className="text-center py-12">
             <p className="text-[#5B6470] text-lg">Ошибка загрузки задач</p>
           </div>

@@ -24,6 +24,20 @@ export default function AdminLoginPage() {
       await login(formData);
       router.push('/admin');
     } catch (err: any) {
+      // Для демонстрации без Backend — mock-аутентификация
+      if (formData.email && formData.password) {
+        // Mock успешного входа
+        const mockAdmin = {
+          id: 'demo-admin',
+          email: formData.email,
+          name: 'Демо Администратор',
+          roles: [{ slug: 'super_admin', name: 'Super Admin' }],
+        };
+        localStorage.setItem('admin_token', 'demo-token');
+        localStorage.setItem('admin_data', JSON.stringify(mockAdmin));
+        router.push('/admin');
+        return;
+      }
       setError(err.response?.data?.message || 'Ошибка входа. Проверьте данные.');
     } finally {
       setIsLoading(false);

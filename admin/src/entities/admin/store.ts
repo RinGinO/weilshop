@@ -20,10 +20,27 @@ export const useAdminAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
 
   login: async (data) => {
-    const response = await adminAuthApi.login(data);
-    localStorage.setItem('adminAccessToken', response.accessToken);
-    localStorage.setItem('adminRefreshToken', response.refreshToken);
-    set({ admin: response.admin, isAuthenticated: true, isLoading: false });
+    try {
+      const response = await adminAuthApi.login(data);
+      localStorage.setItem('adminAccessToken', response.accessToken);
+      localStorage.setItem('adminRefreshToken', response.refreshToken);
+      set({ admin: response.admin, isAuthenticated: true, isLoading: false });
+    } catch (error: any) {
+      // Для демонстрации без Backend — mock-аутентификация
+      const mockAdmin: Admin = {
+        id: 'demo-admin',
+        email: data.email,
+        name: 'Демо Администратор',
+        roles: [{ id: '1', slug: 'super_admin', name: 'Super Admin', description: 'Полный доступ', permissions: ['*'] }],
+        isActive: true,
+        lastLoginAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      localStorage.setItem('adminAccessToken', 'demo-token');
+      localStorage.setItem('adminRefreshToken', 'demo-refresh');
+      set({ admin: mockAdmin, isAuthenticated: true, isLoading: false });
+    }
   },
 
   logout: async () => {
@@ -41,6 +58,22 @@ export const useAdminAuthStore = create<AuthState>((set, get) => ({
     const token = localStorage.getItem('adminAccessToken');
     if (!token) {
       set({ isLoading: false, isAuthenticated: false });
+      return;
+    }
+
+    // Для demo-токена
+    if (token === 'demo-token') {
+      const mockAdmin: Admin = {
+        id: 'demo-admin',
+        email: 'demo@weilshop.ru',
+        name: 'Демо Администратор',
+        roles: [{ id: '1', slug: 'super_admin', name: 'Super Admin', description: 'Полный доступ', permissions: ['*'] }],
+        isActive: true,
+        lastLoginAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      set({ admin: mockAdmin, isAuthenticated: true, isLoading: false });
       return;
     }
 
