@@ -2,29 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-
-interface CartItem {
-  id: string;
-  slug: string;
-  name: string;
-  brand: string;
-  price: number;
-  volume: string | null;
-  quantity: number;
-}
-
-const INITIAL_CART: CartItem[] = [
-  { id: '1', slug: 'avtoshampun-premium', name: 'Автошампунь Premium', brand: 'Leraton', price: 890, volume: '500 мл', quantity: 2 },
-  { id: '2', slug: 'vosk-karnaubskiy', name: 'Воск карнаубский', brand: 'Leraton', price: 1290, volume: '200 г', quantity: 1 },
-  { id: '3', slug: 'gubka-dlya-moyki', name: 'Губка для мойки', brand: 'Detail', price: 350, volume: null, quantity: 3 },
-  { id: '4', slug: 'varezhka-mikrofibr', name: 'Варежка микрофибра', brand: 'Detail', price: 590, volume: null, quantity: 1 },
-];
+import { useCartStore } from '@/entities/cart/store';
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_CART);
+  const { items, updateQuantity, removeItem, clearCart, totalItems, totalPrice } = useCartStore();
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-
-  // Form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,19 +15,8 @@ export default function CartPage() {
     comment: '',
   });
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems(items =>
-      items.map(item => (item.id === id ? { ...item, quantity: newQuantity } : item))
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const delivery = 0; // Бесплатная доставка
+  const subtotal = totalPrice();
+  const delivery = 0;
   const total = subtotal + delivery;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -56,11 +27,11 @@ export default function CartPage() {
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
     alert(`Заказ оформлен!\n\nСумма: ${total} ₽\nМенеджер свяжется с вами в ближайшее время.`);
-    setCartItems([]);
+    clearCart();
     setShowCheckoutForm(false);
   };
 
-  if (cartItems.length === 0 && !showCheckoutForm) {
+  if (items.length === 0 && !showCheckoutForm) {
     return (
       <main className="min-h-screen bg-[#F5F4EF]">
         <div className="container mx-auto px-4 py-16">
@@ -99,8 +70,8 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cartItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-xl p-6 shadow-sm border border-[#D9DCDD]">
+            {items.map((item) => (
+              <div key={item.productId} className="bg-white rounded-xl p-6 shadow-sm border border-[#D9DCDD]">
                 <div className="flex items-center gap-6">
                   {/* Image */}
                   <Link href={`/catalog/${item.slug}`} className="flex-shrink-0">
@@ -127,27 +98,27 @@ export default function CartPage() {
                   {/* Quantity */}
                   <div className="flex items-center border border-[#D9DCDD] rounded-lg">
                     <button
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                       className="px-4 py-2 text-[#000000] hover:bg-[#F5F4EF] rounded-l-lg"
                     >
                       −
                     </button>
                     <span className="px-6 py-2 text-[#000000] font-semibold">{item.quantity}</span>
                     <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                       className="px-4 py-2 text-[#000000] hover:bg-[#F5F4EF] rounded-r-lg"
                     >
                       +
                     </button>
                   </div>
 
-                  {/* Total */}
+                  {/* Total & Remove */}
                   <div className="text-right">
                     <div className="text-lg font-bold text-[#000000] mb-2">
                       {item.price * item.quantity} ₽
                     </div>
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.productId)}
                       className="text-sm text-red-600 hover:text-red-800"
                     >
                       Удалить
@@ -173,7 +144,7 @@ export default function CartPage() {
 
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-[#5B6470]">
-                  <span>Товары ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} шт.)</span>
+                  <span>Товары ({totalItems()} шт.)</span>
                   <span>{subtotal} ₽</span>
                 </div>
                 <div className="flex justify-between text-[#5B6470]">
@@ -300,7 +271,7 @@ export default function CartPage() {
                 <h3 className="font-semibold text-[#000000] mb-4">Детали заказа</h3>
                 <div className="space-y-2 text-[#5B6470]">
                   <div className="flex justify-between">
-                    <span>Товары ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} шт.)</span>
+                    <span>Товары ({totalItems()} шт.)</span>
                     <span className="text-[#000000] font-semibold">{subtotal} ₽</span>
                   </div>
                   <div className="flex justify-between">
